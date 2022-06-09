@@ -95,11 +95,11 @@ pre_tokenizer = transformers.BertTokenizer.from_pretrained(
 # )
 
 print("数据元加载中...")
-f = open("./meta_data.csv", encoding='utf-8')
-reader = csv.reader(f)
-meta_list = []
-for i in reader:
-    meta_list.append(i[0])
+with open("./meta_data.csv", encoding='utf-8') as f:
+    reader = csv.reader(f)
+    meta_list = []
+    for i in reader:
+        meta_list.append(i[0])
 sentences = np.array([["", i] for i in meta_list])
 
 
@@ -130,21 +130,60 @@ def check_similarity(sentence1, sentence2):
 
     proba = model.predict(test_data[0])[0]
     idx = np.argmax(proba)
-    proba = f"{proba[idx]: .2f}%"
+    proba = f"{proba[idx]: .6f}"
     pred = labels[idx]
     return pred, proba
 
 
+def show_meta():
+    for t in meta_list:
+        print(t)
+
+
+def add_meta(meta):
+    if meta in meta_list:
+        print("数据元已存在")
+        return
+    meta_list.append(meta)
+    with open("./meta_data.csv", 'w', encoding='utf-8', newline='') as f:
+        writer = csv.writer(f)
+        for r in meta_list:
+            writer.writerow([r])
+        print("success")
+
+
+def del_meta(meta):
+    if not meta in meta_list:
+        print("数据远不存在")
+        return
+    meta_list.pop(meta_list.index(meta))
+    with open("./meta_data.csv", 'w', encoding='utf-8', newline='') as f:
+        writer = csv.writer(f)
+        for r in meta_list:
+            writer.writerow([r])
+    print("success")
+
+
 if __name__ == "__main__":
     print("输入一个字段在数据元中查询相似项\n"
-          "输入两个字段(以" "分割)查询相似性")
+          "输入两个字段(以" "分割)查询相似性\n"
+          '输入"meta"查看所有数据元\n'
+          '输入"add + 数据元"添加数据元')
     while True:
         inputs = input("输入字段：").split()
         if len(inputs) == 1:
-            res = check_similarities(inputs[0])[0:5]
-            for i in res:
-                print(meta_list[i[3]], i[1])
+            if inputs[0] == "meta":
+                show_meta()
+            else:
+                res = check_similarities(inputs[0])[0:5]
+                for i in res:
+                    print(meta_list[i[3]], i[1])
         if len(inputs) == 2:
-            res = check_similarity(inputs[0], inputs[1])
-            print("相似情况: " + res[0] + " 程度: " + res[1])
+            if inputs[0] == "add":
+                add_meta(inputs[1])
+            elif inputs[0] == "del":
+                del_meta(inputs[1])
+            else:
+                res = check_similarity(inputs[0], inputs[1])
+                print("相似情况: " + res[0] + " 程度: " + res[1])
 
