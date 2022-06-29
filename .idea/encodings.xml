@@ -3,5 +3,6 @@
   <component name="Encoding">
     <file url="file://$PROJECT_DIR$/fit_data/dev.csv" charset="GBK" />
     <file url="file://$PROJECT_DIR$/fit_data/train.csv" charset="GBK" />
+    <file url="PROJECT" charset="UTF-8" />
   </component>
 </project>

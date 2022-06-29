@@ -1,10 +1,12 @@
 import csv
-import time
 import tensorflow as tf
 import transformers
 import numpy as np
-import pandas as pd
+import os
+import warnings
 
+warnings.filterwarnings('ignore')
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 labels = ["contradiction", "entailment", "neutral"]
 max_length = 64  # Maximum length of input sentence to the model.
 batch_size = 8
@@ -166,9 +168,10 @@ def del_meta(meta):
 
 if __name__ == "__main__":
     print("输入一个字段在数据元中查询相似项\n"
-          "输入两个字段(以" "分割)查询相似性\n"
+          '输入两个字段(以" "分割)查询相似性\n'
           '输入"meta"查看所有数据元\n'
-          '输入"add + 数据元"添加数据元')
+          '输入"add + 数据元"添加数据元\n'
+          '输入"del + 数据元"删除数据元\n')
     while True:
         inputs = input("输入字段：").split()
         if len(inputs) == 1:

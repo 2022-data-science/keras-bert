@@ -5,7 +5,7 @@ import transformers
 
 labels = ["contradiction", "entailment", "neutral"]
 max_length = 64  # Maximum length of input sentence to the model.
-batch_size = 4
+batch_size = 8
 epochs = 3
 
 
